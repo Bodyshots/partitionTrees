@@ -55,7 +55,8 @@ class PartitionTree:
 
 if __name__ == "__main__":
     """
-    Note: to run python in linux, prepend the file name w/ "python3"
+    Note: Printing a GroupTree beyond 8 may not show the entirety of its string output,
+    due to its information taking up much of the terminal window
     """
     test = GroupTree(8)
     print(test.get_partition_num())
