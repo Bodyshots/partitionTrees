@@ -8,6 +8,10 @@ class GroupTree:
         self.children = self.create_children()
 
     def create_children(self) -> List["PartitionTree"]:
+        """
+        Return the possible integer partitions for <self.element> 
+        as a list of PartitionTrees
+        """
         return [PartitionTree(partition, self.element, self.height + 1) 
                 for partition in Partitions(self.element)[1:]]
 
@@ -18,9 +22,17 @@ class GroupTree:
 
         return string
 
-    def get_partition_num(self) -> int: return len(self.children) + 1
+    def get_partition_num(self) -> int:
+        """
+        Returns the number of partitions for <self.element>
+        """
+        return len(self.children) + 1
 
-    def get_partitions(self) -> str: 
+    def get_partitions(self) -> str:
+        """
+        Note: The number of partitions printed does not include the element itself
+        nor is the element itself printed as a partition
+        """
         string = f"{self.get_partition_num()} partition(s) for {self.element}:\n"
         string += f"\t{str([self.element])}\n"
         for partition in self.children:
@@ -28,6 +40,9 @@ class GroupTree:
         return string
 
     def get_num_k_partitions(self, k: int) -> int:
+        """
+        Return the number of <k>-lengthed partitions for <self.element>
+        """
         count = 0
         if k == 1: count = 1
         else:
@@ -137,6 +152,10 @@ class PartitionTree:
         self.children = self.create_children()
 
     def create_children(self) -> List["GroupTree"]:
+        """
+        Return the unique numbers in <self.partition> (excluding 1)
+        as a list of GroupTrees
+        """
         groups = []
         group_nums = []
         for num in self.partition: 
@@ -146,13 +165,22 @@ class PartitionTree:
         return groups
 
     def __str__(self) -> str:
+        """
+        Note: The number of partitions printed does not include the element itself
+        nor is the element itself printed as a partition
+        """
         string = "\t" * self.height + f"{self.group}: {self.partition}\n"
         for group in self.children:
             string += f"{str(group)}"
         
         return string
 
-    def get_group_amt(self) -> int: return len(self.children)
+    def get_group_amt(self) -> int:
+        """
+        Returns the number of unique numbers in the partition
+        (excluding 1)
+        """
+        return len(self.children)
 
 if __name__ == "__main__":
     """
@@ -160,6 +188,7 @@ if __name__ == "__main__":
     due to its information taking up much of the terminal window
     """
     test_tree = GroupTree(13)
+    print(GroupTree(7))
     print(test_tree.partition_triangle())
     print(test_tree.get_triangle_row(13))
     print(test_tree.get_triangle_col(1))
