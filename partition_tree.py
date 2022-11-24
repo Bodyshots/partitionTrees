@@ -17,13 +17,24 @@ class GroupTree:
 
         return string
 
-    def get_partition_num(self): return len(self.children)
+    def get_partition_num(self): return len(self.children) + 1
 
     def get_partitions(self): 
         string = f"{self.get_partition_num()} partition(s) for {self.element}:\n"
+        string += f"\t{str([self.element])}\n"
         for partition in self.children:
             string += f"\t{str(partition.partition)}\n"
         return string
+
+    def get_num_k_partitions(self, k: int):
+        count = 0
+        if k == 1: count = 1
+        else:
+            for partition in self.children: 
+                if len(partition.partition) == k: count += 1
+
+        print(f"{self.element}: Number of {k}-length partitions: {count}")
+        return count
 
 class PartitionTree:
     """
@@ -58,6 +69,8 @@ if __name__ == "__main__":
     Note: Printing a GroupTree beyond 8 may not show the entirety of its string output,
     due to its information taking up much of the terminal window
     """
-    test = GroupTree(8)
-    print(test.get_partition_num())
-    print(test.get_partitions())
+    for j in range(1, 7):
+        for i in range(1, 13):
+            test = GroupTree(i)
+            test.get_num_k_partitions(j)
+        print("\n")
