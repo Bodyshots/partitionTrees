@@ -107,7 +107,16 @@ class GroupTree:
         """
         Prereq: 1 <= row_num <= self.element
         """
-        return [self.get_num_k_partitions(k) for k in range(1, row_num + 1)]
+        row = []
+        for n in range(1, row_num + 1):
+            tree = GroupTree(n)
+            row = [tree.get_num_k_partitions(k) for k in range(1, n + 1)]
+        return row
+
+    def triangle_row_sum(self, row_num: int) -> int:
+        row, count = self.get_triangle_row(row_num), 0
+        for i in row: count += i
+        return count
 
     def get_triangle_col(self, col_num: int) -> List[int]:
         """
@@ -188,8 +197,10 @@ if __name__ == "__main__":
     due to its information taking up much of the terminal window
     """
     test_tree = GroupTree(13)
-    print(GroupTree(7))
+    # print(GroupTree(7))
     print(test_tree.partition_triangle())
-    print(test_tree.get_triangle_row(13))
-    print(test_tree.get_triangle_col(1))
+    # print(test_tree.get_triangle_row(13))
+    # print(test_tree.get_triangle_col(1))
     print(test_tree.get_triangle_entry(4, 12))
+    for i in range(1, 15):
+        print(f"Row {i}: {test_tree.triangle_row_sum(i)}")
