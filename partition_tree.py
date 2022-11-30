@@ -78,30 +78,30 @@ class GroupTree:
         - If i <= k - 1, then the ith entry will be 0 (ie. there is no
         such k-lengthed integer partition for the number i)
         """
-        # Right-angled triangle version
-        # string = ""
-        # for n in range(1, self.element + 1):
-        #     string += "\n1"
-        #     tree = GroupTree(n)
-        #     for k in range(2, self.element + 1):
-        #         count = tree.get_num_k_partitions(k)
-        #         if count != 0: string += f" {count}"
-        # return f"{string}\n"
-
-        from os import get_terminal_size
-        term_width = get_terminal_size().columns
+        ## Right-angled triangle version
         string = ""
-        for n in range(1, self.element + 1): # column
+        for n in range(1, self.element + 1):
             string += "\n1"
             tree = GroupTree(n)
-            for k in range(2, n + 1): # row
+            for k in range(2, self.element + 1):
                 count = tree.get_num_k_partitions(k)
-                string += f" {count}"
+                if count != 0: string += f" {count}"
+        return f"{string}\n"
 
-        centered_strs = [row.center(term_width) for row in string.split("\n")]
-        res_string = ""
-        for centered_str in centered_strs: res_string += centered_str + "\n"
-        return res_string
+        # from os import get_terminal_size
+        # term_width = get_terminal_size().columns
+        # string = ""
+        # for n in range(1, self.element + 1): # column
+        #     string += "\n1"
+        #     tree = GroupTree(n)
+        #     for k in range(2, n + 1): # row
+        #         count = tree.get_num_k_partitions(k)
+        #         string += f" {count}"
+
+        # centered_strs = [row.center(term_width) for row in string.split("\n")]
+        # res_string = ""
+        # for centered_str in centered_strs: res_string += centered_str + "\n"
+        # return res_string
 
     def get_triangle_row(self, row_num: int) -> List[int]:
         """
@@ -114,19 +114,21 @@ class GroupTree:
         return row
 
     def triangle_row_sum(self, row_num: int) -> int:
-        row, count = self.get_triangle_row(row_num), 0
-        for i in row: count += i
-        return count
+        return sum(self.get_triangle_row(row_num))
 
     def get_triangle_col(self, col_num: int) -> List[int]:
         """
         Prereq: 1 <= col_num <= self.element
         """
+        if col_num == 1: return [1 for _ in range(self.element)]
         col = []
-        for n in range(col_num, self.element + 1):
+        for n in range(col_num - 1, self.element + 1):
             tree = GroupTree(n)
             col.append(tree.get_num_k_partitions(col_num))
         return col
+
+    def triangle_col_sum(self, col_num: int) -> int:
+        return sum(self.get_triangle_col(col_num))
 
     def get_triangle_entry(self, col_num: int, row_num: int):
         """
@@ -202,5 +204,6 @@ if __name__ == "__main__":
     # print(test_tree.get_triangle_row(13))
     # print(test_tree.get_triangle_col(1))
     print(test_tree.get_triangle_entry(4, 12))
-    for i in range(1, 15):
-        print(f"Row {i}: {test_tree.triangle_row_sum(i)}")
+    # for i in range(1, 14): print(f"Row {i}: {test_tree.triangle_row_sum(i)}")
+    for i in range(1, 14): print(f"Col {i}: {GroupTree(13).triangle_col_sum(i)}")
+
